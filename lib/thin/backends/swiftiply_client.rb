@@ -10,7 +10,7 @@ module Thin
         @host = host
         @port = port.to_i
         @key  = options[:swiftiply].to_s
-        if @key.nil? || @key.blank?
+        if @key.nil? || @key == ""
           @key = ENV["SWIFTIPLY_KEY"].to_s
         end
         super()
