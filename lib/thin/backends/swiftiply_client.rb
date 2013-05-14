@@ -42,6 +42,22 @@ module Thin
       super
       EventMachine.add_timer(rand(2)) { reconnect(@backend.host, @backend.port) } if @backend.running?
     end
+
+    def post_process(result)
+      return unless result
+      result = result.to_a
+
+      # Status code -1 indicates that we're going to respond later (async).
+      return if result.first == AsyncResponse.first
+      status, headers, body = *result
+      if (status.to_i < 300)
+        if !headers.has_key?("Content-Length") || headers["Content-Length"].to_i == 0
+          headers["X-Swiftiply-Close"] = "true"
+        end
+      end
+      p status, headers
+      super([status, headers, body])
+    end
     
     protected
       def swiftiply_handshake(key)
@@ -51,6 +67,25 @@ module Thin
       # For some reason Swiftiply request the current host
       def host_ip
         Socket.gethostbyname(@backend.host)[3].unpack('CCCC') rescue [0,0,0,0]
+      end
+
+      # Does request and response cleanup (closes open IO streams and
+      # deletes created temporary files).
+      # Re-initializes response and request if client supports persistent
+      # connection.
+      def terminate_request
+        unless persistent?
+          close_connection_after_writing rescue nil
+          close_request_response
+        else
+          send_data "<!--SC->" if @response.headers.has_key?("X-Swiftiply-Close")
+          close_request_response
+          # Connection become idle but it's still open
+          @idle = true
+          # Prepare the connection for another request if the client
+          # supports HTTP pipelining (persistent connection).
+          post_init
+        end
       end
   end
 end
