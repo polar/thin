@@ -32,6 +32,13 @@ cd thin
 rake install
 ```
 
+Swiftiply
+=========
+
+Swiftiply (0.7.0.pre) at git://github.com/polar/swiftiply.git (July 28. 2013) has been
+upgraded to handle chunked transmission on an HTTP response to a Swiftiply backend.
+Thin has been modified in this version to handle that protocol.
+
 
 Usage
 =====

@@ -2,5 +2,5 @@ cluster_address: 0.0.0.0
 cluster_port: 3333
 map:
   - incoming: 127.0.0.1
-    outgoing: 127.0.0.1:5555
+    outgoing: 0.0.0.0:5555
     default: true 

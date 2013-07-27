@@ -2,7 +2,7 @@ require 'socket'
 
 module Thin
   # Connection between the server and client.
-  # This class is instanciated by EventMachine on each new connection
+  # This class is instantiated by EventMachine on each new connection
   # that is opened.
   class Connection < EventMachine::Connection
     include Logging

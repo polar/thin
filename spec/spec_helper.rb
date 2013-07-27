@@ -12,6 +12,7 @@ FileUtils.mkdir_p File.dirname(__FILE__) + '/../log'
 Command.script = File.dirname(__FILE__) + '/../bin/thin'
 Logging.silent = true
 
+#SWIFTIPLY_PATH = "/home/polar/src/swiftiply/bin/swiftiply"
 unless Object.const_defined?(:SWIFTIPLY_PATH)
   SWIFTIPLY_PATH       = `which swiftiply`.chomp
   DEFAULT_TEST_ADDRESS = '0.0.0.0'
@@ -154,7 +155,9 @@ module Helpers
     @server.threaded = options[:threaded]
     @server.timeout = 3
     
-    @thread = Thread.new { @server.start }
+    @thread = Thread.new {
+      @server.start;
+      puts "WTF? Why did we end?" }
     if options[:wait_for_socket]
       wait_for_socket(address, port)
     else

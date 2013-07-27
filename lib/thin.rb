@@ -15,6 +15,7 @@ module Thin
   autoload :Headers,            "thin/headers"
   autoload :Request,            "thin/request"
   autoload :Response,           "thin/response"
+  autoload :SwiftiplyResponse,  "thin/swiftiply_response"
   autoload :Runner,             "thin/runner"
   autoload :Server,             "thin/server"
   autoload :Stats,              "thin/stats"
